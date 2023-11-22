@@ -113,6 +113,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
         border: InputBorder.none,
       ),
       style: TextStyle(fontSize: 16.0, color: AliceConstants.white),
+      cursorColor: AliceConstants.white,
       onChanged: _updateSearchQuery,
     );
   }
