@@ -43,15 +43,25 @@ class AliceStatsScreen extends StatelessWidget {
       _getRow('Redirection requests:', '${_getRedirectionRequests()}'),
       _getRow('Error requests:', '${_getErrorRequests()}'),
       _getRow(
-          'Bytes send:', AliceConversionHelper.formatBytes(_getBytesSent())),
-      _getRow('Bytes received:',
-          AliceConversionHelper.formatBytes(_getBytesReceived())),
-      _getRow('Average request time:',
-          AliceConversionHelper.formatTime(_getAverageRequestTime())),
-      _getRow('Max request time:',
-          AliceConversionHelper.formatTime(_getMaxRequestTime())),
-      _getRow('Min request time:',
-          AliceConversionHelper.formatTime(_getMinRequestTime())),
+        'Bytes send:',
+        AliceConversionHelper.formatBytes(_getBytesSent()),
+      ),
+      _getRow(
+        'Bytes received:',
+        AliceConversionHelper.formatBytes(_getBytesReceived()),
+      ),
+      _getRow(
+        'Average request time:',
+        AliceConversionHelper.formatTime(_getAverageRequestTime()),
+      ),
+      _getRow(
+        'Max request time:',
+        AliceConversionHelper.formatTime(_getMaxRequestTime()),
+      ),
+      _getRow(
+        'Min request time:',
+        AliceConversionHelper.formatTime(_getMinRequestTime()),
+      ),
       _getRow('Get requests:', "${_getRequests("GET")} "),
       _getRow('Post requests:', "${_getRequests("POST")} "),
       _getRow('Delete requests:', "${_getRequests("DELETE")} "),
@@ -75,7 +85,7 @@ class AliceStatsScreen extends StatelessWidget {
         Text(
           value,
           style: _getValueTextStyle(),
-        )
+        ),
       ],
     );
   }
@@ -93,26 +103,32 @@ class AliceStatsScreen extends StatelessWidget {
   }
 
   int _getSuccessRequests() => calls
-      .where((call) =>
-          call.response != null &&
-          call.response!.status >= 200 &&
-          call.response!.status < 300)
+      .where(
+        (call) =>
+            call.response != null &&
+            call.response!.status >= 200 &&
+            call.response!.status < 300,
+      )
       .toList()
       .length;
 
   int _getRedirectionRequests() => calls
-      .where((call) =>
-          call.response != null &&
-          call.response!.status >= 300 &&
-          call.response!.status < 400)
+      .where(
+        (call) =>
+            call.response != null &&
+            call.response!.status >= 300 &&
+            call.response!.status < 400,
+      )
       .toList()
       .length;
 
   int _getErrorRequests() => calls
-      .where((call) =>
-          call.response != null &&
-          call.response!.status >= 400 &&
-          call.response!.status < 600)
+      .where(
+        (call) =>
+            call.response != null &&
+            call.response!.status >= 400 &&
+            call.response!.status < 600,
+      )
       .toList()
       .length;
 
@@ -120,16 +136,16 @@ class AliceStatsScreen extends StatelessWidget {
       calls.where((call) => call.loading).toList().length;
 
   int _getBytesSent() {
-    int bytes = 0;
-    for (var call in calls) {
+    var bytes = 0;
+    for (final call in calls) {
       bytes += call.request?.size ?? 0;
     }
     return bytes;
   }
 
   int _getBytesReceived() {
-    int bytes = 0;
-    for (var call in calls) {
+    var bytes = 0;
+    for (final call in calls) {
       if (call.response != null) {
         bytes += call.response?.size ?? 0;
       }
@@ -138,9 +154,9 @@ class AliceStatsScreen extends StatelessWidget {
   }
 
   int _getAverageRequestTime() {
-    int requestTimeSum = 0;
-    int requestsWithDurationCount = 0;
-    for (var call in calls) {
+    var requestTimeSum = 0;
+    var requestsWithDurationCount = 0;
+    for (final call in calls) {
       if (call.duration != 0) {
         requestTimeSum = call.duration;
         requestsWithDurationCount++;
@@ -153,8 +169,8 @@ class AliceStatsScreen extends StatelessWidget {
   }
 
   int _getMaxRequestTime() {
-    int maxRequestTime = 0;
-    for (var call in calls) {
+    var maxRequestTime = 0;
+    for (final call in calls) {
       if (call.duration > maxRequestTime) {
         maxRequestTime = call.duration;
       }
@@ -163,11 +179,11 @@ class AliceStatsScreen extends StatelessWidget {
   }
 
   int _getMinRequestTime() {
-    int minRequestTime = 10000000;
+    var minRequestTime = 10000000;
     if (calls.isEmpty) {
       minRequestTime = 0;
     } else {
-      for (var call in calls) {
+      for (final call in calls) {
         if (call.duration != 0 && call.duration < minRequestTime) {
           minRequestTime = call.duration;
         }

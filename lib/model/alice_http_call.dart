@@ -23,7 +23,7 @@ class AliceHttpCall {
     loading = true;
   }
 
-  setResponse(AliceHttpResponse response) {
+  void setResponse(AliceHttpResponse response) {
     this.response = response;
     loading = false;
   }
@@ -36,21 +36,43 @@ class AliceHttpCall {
     var compressed = false;
     var curlCmd = 'curl';
     curlCmd += ' -X $method';
-    final headers = request!.headers;
-    headers.forEach((key, value) {
+    request!.headers.forEach((key, value) {
       if ('Accept-Encoding' == key && 'gzip' == value) {
         compressed = true;
       }
       curlCmd += " -H '$key: $value'";
     });
 
-    final String requestBody = request!.body.toString();
+    final requestBody = request!.body.toString();
     if (requestBody != '') {
-      // try to keep to a single line and use a subshell to preserve any line breaks
+      // try to keep to a single line
+      // and use a subshell to preserve any line breaks
       curlCmd += " --data \$'" + requestBody.replaceAll('\n', '\\n') + "'";
     }
-    curlCmd += (compressed ? ' --compressed ' : ' ') +
-        "'${secure ? 'https://' : 'http://'}$server$endpoint'";
+    final queryParamMap = request!.queryParameters;
+    var paramCount = queryParamMap.keys.length;
+    var queryParams = '';
+    if (paramCount > 0) {
+      queryParams += '?';
+      queryParamMap.forEach((key, dynamic value) {
+        queryParams += '$key=$value';
+        paramCount -= 1;
+        if (paramCount > 0) {
+          queryParams += '&';
+        }
+      });
+    }
+
+    // If server already has http(s) don't add it again
+    if (server.contains('http://') || server.contains('https://')) {
+      // ignore: join_return_with_assignment
+      curlCmd += "${compressed ? " --compressed " : " "}${"'$server"
+          "$endpoint$queryParams'"}";
+    } else {
+      // ignore: join_return_with_assignment
+      curlCmd += "${compressed ? " --compressed " : " "}${"'"
+          "${secure ? 'https://' : 'http://'}$server$endpoint$queryParams'"}";
+    }
     return curlCmd;
   }
 }

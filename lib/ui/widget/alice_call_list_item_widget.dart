@@ -29,57 +29,61 @@ class AliceCallListItemWidget extends StatelessWidget {
                       const SizedBox(height: 4),
                       _buildServerRow(),
                       const SizedBox(height: 4),
-                      _buildStatsRow()
+                      _buildStatsRow(),
                     ],
                   ),
                 ),
-                _buildResponseColumn(context)
+                _buildResponseColumn(context),
               ],
             ),
           ),
-          _buildDivider()
+          _buildDivider(),
         ],
       ),
     );
   }
 
   Widget _buildMethodAndEndpointRow(BuildContext context) {
-    final Color textColor = _getEndpointTextColor(context);
-    return Row(children: [
-      Text(
-        call.method,
-        style: TextStyle(fontSize: 16, color: textColor),
-      ),
-      const Padding(
-        padding: EdgeInsets.only(left: 10),
-      ),
-      Flexible(
-        child: Text(
-          call.endpoint,
-          overflow: TextOverflow.visible,
-          style: TextStyle(
-            fontSize: 16,
-            color: textColor,
+    final textColor = _getEndpointTextColor(context);
+    return Row(
+      children: [
+        Text(
+          call.method,
+          style: TextStyle(fontSize: 16, color: textColor),
+        ),
+        const Padding(
+          padding: EdgeInsets.only(left: 10),
+        ),
+        Flexible(
+          child: Text(
+            call.endpoint,
+            overflow: TextOverflow.visible,
+            style: TextStyle(
+              fontSize: 16,
+              color: textColor,
+            ),
           ),
         ),
-      )
-    ]);
+      ],
+    );
   }
 
   Widget _buildServerRow() {
-    return Row(children: [
-      _getSecuredConnectionIcon(call.secure),
-      Expanded(
-        child: Text(
-          call.server,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: const TextStyle(
-            fontSize: 14,
+    return Row(
+      children: [
+        _getSecuredConnectionIcon(call.secure),
+        Expanded(
+          child: Text(
+            call.server,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: const TextStyle(
+              fontSize: 14,
+            ),
           ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   Widget _buildStatsRow() {
@@ -87,21 +91,24 @@ class AliceCallListItemWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(
-            flex: 1,
-            child: Text(_formatTime(call.request?.time),
-                style: const TextStyle(fontSize: 12))),
+          child: Text(
+            _formatTime(call.request?.time),
+            style: const TextStyle(fontSize: 12),
+          ),
+        ),
         Flexible(
-            flex: 1,
-            child: Text(AliceConversionHelper.formatTime(call.duration),
-                style: const TextStyle(fontSize: 12))),
+          child: Text(
+            AliceConversionHelper.formatTime(call.duration),
+            style: const TextStyle(fontSize: 12),
+          ),
+        ),
         Flexible(
-          flex: 1,
           child: Text(
             '${AliceConversionHelper.formatBytes(call.request?.size ?? 0)} / '
             '${AliceConversionHelper.formatBytes(call.response?.size ?? 0)}',
             style: const TextStyle(fontSize: 12),
           ),
-        )
+        ),
       ],
     );
   }
@@ -126,22 +133,24 @@ class AliceCallListItemWidget extends StatelessWidget {
   }
 
   Widget _buildResponseColumn(BuildContext context) {
-    final List<Widget> widgets = [];
+    final widgets = <Widget>[];
     if (call.loading) {
-      widgets.add(
-        SizedBox(
-          width: 20,
-          height: 20,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(AliceConstants.lightRed),
+      widgets
+        ..add(
+          SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(AliceConstants.lightRed),
+            ),
           ),
-        ),
-      );
-      widgets.add(
-        const SizedBox(
-          height: 4,
-        ),
-      );
+        )
+        ..add(
+          const SizedBox(
+            height: 4,
+          ),
+        );
     }
     widgets.add(
       Text(
@@ -155,14 +164,13 @@ class AliceCallListItemWidget extends StatelessWidget {
     return SizedBox(
       width: 50,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: widgets,
       ),
     );
   }
 
   Color _getStatusTextColor(BuildContext context) {
-    final int status = call.response?.status ?? -1;
+    final status = call.response?.status ?? -1;
     if (status == -1) {
       return AliceConstants.red;
     } else if (status < 200) {

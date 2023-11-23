@@ -14,13 +14,13 @@ mixin AliceParser {
     try {
       return encoder.convert(json);
     } catch (exception) {
-      return json;
+      return json.toString();
     }
   }
 
   static dynamic _decodeJson(dynamic body) {
     try {
-      return json.decode(body);
+      return json.decode(body as String);
     } catch (exception) {
       return body;
     }
@@ -35,7 +35,7 @@ mixin AliceParser {
       var bodyContent = _emptyBody;
 
       if (!contentType.toLowerCase().contains(_applicationJson)) {
-        var bodyTemp = body.toString();
+        final bodyTemp = body.toString();
 
         if (bodyTemp.isNotEmpty) {
           bodyContent = bodyTemp;
@@ -46,7 +46,8 @@ mixin AliceParser {
         } else {
           if (body is String) {
             if (body.isNotEmpty) {
-              //body is minified json, so decode it to a map and let the encoder pretty print this map
+              // body is minified json,
+              // so decode it to a map and let the encoder pretty print this map
               bodyContent = _parseJson(_decodeJson(body));
             }
           } else if (body is Stream) {
@@ -65,10 +66,10 @@ mixin AliceParser {
 
   static String getContentType(Map<String, dynamic> headers) {
     if (headers.containsKey(_jsonContentTypeSmall)) {
-      return headers[_jsonContentTypeSmall];
+      return headers[_jsonContentTypeSmall] as String;
     }
     if (headers.containsKey(_jsonContentTypeBig)) {
-      return headers[_jsonContentTypeBig];
+      return headers[_jsonContentTypeBig] as String;
     }
     return _unknownContentType;
   }

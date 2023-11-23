@@ -10,13 +10,11 @@ abstract class AliceBaseCallDetailsWidgetState<T extends StatefulWidget>
 
   Widget getListRow(String name, String value) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
         const Padding(padding: EdgeInsets.only(left: 5)),
         Flexible(
-          fit: FlexFit.loose,
           child: Text(
             value,
             overflow: TextOverflow.clip,
@@ -24,7 +22,7 @@ abstract class AliceBaseCallDetailsWidgetState<T extends StatefulWidget>
         ),
         const Padding(
           padding: EdgeInsets.only(bottom: 18),
-        )
+        ),
       ],
     );
   }

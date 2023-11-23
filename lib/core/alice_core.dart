@@ -11,9 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AliceCore {
-  /// Should inspector use dark theme
-  final bool darkTheme;
-
   /// Rx subject which contains all intercepted http calls
   final BehaviorSubject<List<AliceHttpCall>> callsSubject =
       BehaviorSubject.seeded([]);
@@ -21,11 +18,13 @@ class AliceCore {
   GlobalKey<NavigatorState> _navigatorKey;
   Brightness _brightness = Brightness.light;
   bool _isInspectorOpened = false;
-  StreamSubscription? _callsSubscription;
+  StreamSubscription<dynamic>? _callsSubscription;
 
   /// Creates alice core instance
-  AliceCore(this._navigatorKey, this.darkTheme) {
-    _brightness = darkTheme ? Brightness.dark : Brightness.light;
+  AliceCore(
+    this._navigatorKey,
+  ) {
+    _brightness = Brightness.light;
   }
 
   /// Dispose subjects and subscriptions
@@ -49,13 +48,16 @@ class AliceCore {
     if (context == null) {
       if (kDebugMode) {
         print(
-            'Cant start Alice HTTP Inspector. Please add NavigatorKey to your application');
+          '''
+Cant start Alice HTTP Inspector. 
+Please add NavigatorKey to your application''',
+        );
       }
       return;
     }
     if (!_isInspectorOpened) {
       _isInspectorOpened = true;
-      Navigator.push(
+      Navigator.push<void>(
         context,
         MaterialPageRoute(
           builder: (context) => AliceCallsListScreen(this),
@@ -74,7 +76,7 @@ class AliceCore {
 
   /// Add error to exisng alice http call
   void addError(AliceHttpError error, int requestId) {
-    final AliceHttpCall? selectedCall = _selectCall(requestId);
+    final selectedCall = _selectCall(requestId);
 
     if (selectedCall == null) {
       if (kDebugMode) {
@@ -96,7 +98,7 @@ class AliceCore {
     }
 
     try {
-      final AliceHttpCall? selectedCall = _selectCall(requestId);
+      final selectedCall = _selectCall(requestId);
 
       if (selectedCall == null) {
         if (kDebugMode) {
@@ -104,8 +106,9 @@ class AliceCore {
         }
         return;
       }
-      selectedCall.loading = false;
-      selectedCall.response = response;
+      selectedCall
+        ..loading = false
+        ..response = response;
       if (selectedCall.request?.time.millisecondsSinceEpoch != null) {
         selectedCall.duration = response.time.millisecondsSinceEpoch -
             selectedCall.request!.time.millisecondsSinceEpoch;

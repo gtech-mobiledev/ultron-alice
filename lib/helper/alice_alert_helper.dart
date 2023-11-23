@@ -12,8 +12,7 @@ mixin AliceAlertHelper {
     Function? secondButtonAction,
     Brightness? brightness,
   }) {
-    final List<Widget> actions = [];
-    actions.add(
+    final actions = <Widget>[
       TextButton(
         child: Text(firstButtonTitle),
         onPressed: () {
@@ -23,7 +22,7 @@ mixin AliceAlertHelper {
           Navigator.of(context).pop();
         },
       ),
-    );
+    ];
     if (secondButtonTitle != null) {
       actions.add(
         TextButton(
@@ -37,7 +36,7 @@ mixin AliceAlertHelper {
         ),
       );
     }
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext buildContext) {
         return Theme(

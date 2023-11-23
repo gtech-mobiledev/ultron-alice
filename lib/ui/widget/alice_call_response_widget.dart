@@ -28,11 +28,12 @@ class _AliceCallResponseWidgetState
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> rows = [];
+    final rows = <Widget>[];
     if (!_call.loading) {
-      rows.addAll(_buildGeneralDataRows());
-      rows.addAll(_buildHeadersRows());
-      rows.addAll(_buildBodyRows());
+      rows
+        ..addAll(_buildGeneralDataRows())
+        ..addAll(_buildHeadersRows())
+        ..addAll(_buildBodyRows());
 
       return Container(
         padding: const EdgeInsets.all(6),
@@ -54,11 +55,12 @@ class _AliceCallResponseWidgetState
       return [];
     }
 
-    List<Widget> rows = [];
-    rows.add(getListRow('Received:', response.time.toString()));
-    rows.add(getListRow('Bytes received:', formatBytes(response.size)));
+    final rows = <Widget>[
+      getListRow('Received:', _call.response!.time.toString()),
+      getListRow('Bytes received:', formatBytes(_call.response!.size)),
+    ];
 
-    var status = response.status;
+    final status = response.status;
     var statusText = '$status';
     if (status == -1) {
       statusText = 'Error';
@@ -74,8 +76,8 @@ class _AliceCallResponseWidgetState
       return [];
     }
 
-    List<Widget> rows = [];
-    var headers = response.headers;
+    final rows = <Widget>[];
+    final headers = response.headers;
     var headersContent = 'Headers are empty';
     if (headers.isNotEmpty) {
       headersContent = '';
@@ -88,7 +90,7 @@ class _AliceCallResponseWidgetState
   }
 
   List<Widget> _buildBodyRows() {
-    List<Widget> rows = [];
+    final rows = <Widget>[];
     if (_isImageResponse()) {
       rows.addAll(_buildImageBodyRows());
     } else if (_isTextResponse()) {
@@ -105,8 +107,7 @@ class _AliceCallResponseWidgetState
   }
 
   List<Widget> _buildImageBodyRows() {
-    List<Widget> rows = [];
-    rows.add(
+    return [
       Column(
         children: [
           const Row(
@@ -114,7 +115,7 @@ class _AliceCallResponseWidgetState
               Text(
                 'Body: Image',
                 style: TextStyle(fontWeight: FontWeight.bold),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -122,14 +123,17 @@ class _AliceCallResponseWidgetState
             _call.uri,
             fit: BoxFit.fill,
             headers: _buildRequestHeaders(),
-            loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent? loadingProgress) {
+            loadingBuilder: (
+              BuildContext context,
+              Widget child,
+              ImageChunkEvent? loadingProgress,
+            ) {
               if (loadingProgress == null) return child;
               return Center(
                 child: CircularProgressIndicator(
                   value: loadingProgress.expectedTotalBytes != null
                       ? loadingProgress.cumulativeBytesLoaded /
-                          (loadingProgress.expectedTotalBytes ?? 1)
+                          loadingProgress.expectedTotalBytes!
                       : null,
                 ),
               );
@@ -138,8 +142,7 @@ class _AliceCallResponseWidgetState
           const SizedBox(height: 8),
         ],
       ),
-    );
-    return rows;
+    ];
   }
 
   List<Widget> _buildLargeBodyTextRows() {
@@ -148,25 +151,31 @@ class _AliceCallResponseWidgetState
       return [];
     }
 
-    List<Widget> rows = [];
+    final rows = <Widget>[];
     if (_showLargeBody) {
       return _buildTextBodyRows();
     } else {
-      rows.add(getListRow('Body:',
-          'Too large to show (${response.body.toString().length} Bytes)'));
-      rows.add(const SizedBox(height: 8));
-      rows.add(
-        ElevatedButton(
-          child: const Text('Show body'),
-          onPressed: () {
-            setState(() {
-              _showLargeBody = true;
-            });
-          },
-        ),
-      );
-      rows.add(const SizedBox(height: 8));
-      rows.add(const Text('Warning! It will take some time to render output.'));
+      rows
+        ..add(
+          getListRow(
+            'Body:',
+            'Too large to show '
+                '(${_call.response!.body.toString().length} Bytes)',
+          ),
+        )
+        ..add(const SizedBox(height: 8))
+        ..add(
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _showLargeBody = true;
+              });
+            },
+            child: const Text('Show body'),
+          ),
+        )
+        ..add(const SizedBox(height: 8))
+        ..add(const Text('Warning! It will take some time to render output.'));
     }
     return rows;
   }
@@ -177,9 +186,9 @@ class _AliceCallResponseWidgetState
       return [];
     }
 
-    List<Widget> rows = [];
-    var headers = response.headers;
-    var bodyContent = formatBody(response.body, getContentType(headers));
+    final rows = <Widget>[];
+    final headers = response.headers;
+    final bodyContent = formatBody(response.body, getContentType(headers));
     rows.add(getListRow('Body:', bodyContent));
     return rows;
   }
@@ -190,36 +199,39 @@ class _AliceCallResponseWidgetState
       return [];
     }
 
-    List<Widget> rows = [];
-    var headers = response.headers;
-    var contentType = getContentType(headers);
+    final rows = <Widget>[];
+    final headers = response.headers;
+    final contentType = getContentType(headers);
 
     if (_showUnsupportedBody) {
-      var bodyContent = formatBody(response.body, getContentType(headers));
+      final bodyContent = formatBody(response.body, getContentType(headers));
       rows.add(getListRow('Body:', bodyContent));
     } else {
-      rows.add(getListRow(
-          'Body:',
-          'Unsupported body. Alice can render video/image/text body. '
-              "Response has Content-Type: $contentType which can't be handled. "
-              "If you're feeling lucky you can try button below to try render body"
-              ' as text, but it may fail.'));
-      rows.add(
-        ElevatedButton(
-          child: const Text('Show unsupported body'),
-          onPressed: () {
-            setState(() {
-              _showUnsupportedBody = true;
-            });
-          },
-        ),
-      );
+      rows
+        ..add(
+          getListRow(
+              'Body:',
+              'Unsupported body. Alice can render video/image/text body. '
+                  "Response has Content-Type: $contentType which can't be "
+                  "handled. If you're feeling lucky you can try button below "
+                  'to try render body as text, but it may fail.'),
+        )
+        ..add(
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                _showUnsupportedBody = true;
+              });
+            },
+            child: const Text('Show unsupported body'),
+          ),
+        );
     }
     return rows;
   }
 
   Map<String, String> _buildRequestHeaders() {
-    Map<String, String> requestHeaders = {};
+    final requestHeaders = <String, String>{};
 
     final request = _call.request;
     if (request == null) {
@@ -243,7 +255,7 @@ class _AliceCallResponseWidgetState
   }
 
   bool _isTextResponse() {
-    String responseContentTypeLowerCase =
+    final responseContentTypeLowerCase =
         _getContentTypeOfResponse().toLowerCase();
 
     return responseContentTypeLowerCase.contains(_jsonContentType) ||

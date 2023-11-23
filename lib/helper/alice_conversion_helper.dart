@@ -33,7 +33,7 @@ mixin AliceConversionHelper {
       return '${_formatDouble(timeInMillis / _secondAsMillisecond)} s';
     }
 
-    final Duration duration = Duration(milliseconds: timeInMillis);
+    final duration = Duration(milliseconds: timeInMillis);
 
     return '${duration.inMinutes} min ${duration.inSeconds.remainder(60)} s '
         '${duration.inMilliseconds.remainder(1000)} ms';

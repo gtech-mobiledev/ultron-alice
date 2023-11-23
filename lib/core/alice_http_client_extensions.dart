@@ -5,17 +5,21 @@ import 'dart:io';
 import 'package:alice/alice.dart';
 
 extension AliceHttpClientExtensions on Future<HttpClientRequest> {
-  /// Intercept http client with alice. This extension method provides additional
+  /// Intercept http client with alice.
+  /// This extension method provides additional
   /// helpful method to intercept httpClientResponse.
-  Future<HttpClientResponse> interceptWithAlice(Alice alice,
-      {dynamic body, Map<String, dynamic> headers = const {}}) async {
-    final HttpClientRequest request = await this;
+  Future<HttpClientResponse> interceptWithAlice(
+    Alice alice, {
+    dynamic body,
+    Map<String, dynamic> headers = const {},
+  }) async {
+    final request = await this;
     if (body != null) {
       request.write(body);
     }
     headers.forEach(
       (String key, dynamic value) {
-        request.headers.add(key, value);
+        request.headers.add(key, value as Object);
       },
     );
     alice.onHttpClientRequest(request, body: body);

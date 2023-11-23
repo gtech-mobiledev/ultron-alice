@@ -8,32 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Alice {
-  /// Should inspector use dark theme
-  final bool darkTheme;
-
   GlobalKey<NavigatorState> _navigatorKey;
   AliceCore _aliceCore;
   AliceHttpClientAdapter _httpClientAdapter;
-
-  Alice._(this.darkTheme, this._navigatorKey, this._aliceCore,
-      this._httpClientAdapter);
 
   /// Creates alice instance.
   factory Alice({
     GlobalKey<NavigatorState> navigatorKey =
         const GlobalObjectKey<NavigatorState>('AliceNavigatorState'),
-    bool darkTheme = false,
   }) {
-    final aliceCore = AliceCore(navigatorKey, darkTheme);
+    final aliceCore = AliceCore(navigatorKey);
     final httpClientAdapter = AliceHttpClientAdapter(aliceCore);
 
     return Alice._(
-      darkTheme,
       navigatorKey,
       aliceCore,
       httpClientAdapter,
     );
   }
+
+  Alice._(this._navigatorKey, this._aliceCore, this._httpClientAdapter);
 
   /// Set custom navigation key. This will help if there's route library.
   void setNavigatorKey(GlobalKey<NavigatorState> navigatorKey) {
@@ -57,8 +51,10 @@ class Alice {
 
   /// Handle response from HttpClient
   void onHttpClientResponse(
-      HttpClientResponse response, HttpClientRequest request,
-      {dynamic body}) {
+    HttpClientResponse response,
+    HttpClientRequest request, {
+    dynamic body,
+  }) {
     _httpClientAdapter.onResponse(response, request, body: body);
   }
 
