@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Fix query parameter report
+
 ## 0.0.2
 
 * Fix search field cursor color
