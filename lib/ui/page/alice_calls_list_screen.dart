@@ -145,7 +145,7 @@ class _AliceCallsListScreenState extends State<AliceCallsListScreen> {
               .toList();
         }
         if (calls.isNotEmpty) {
-          return _buildCallsListWidget(calls);
+          return _buildCallsListWidget(calls.reversed.toList());
         } else {
           return _buildEmptyWidget();
         }
