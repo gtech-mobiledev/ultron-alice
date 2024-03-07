@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Reverse call list to get latest call on top
+
 ## 0.0.3
 
 * Fix query parameter report
