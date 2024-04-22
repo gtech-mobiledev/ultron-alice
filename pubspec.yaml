@@ -1,6 +1,6 @@
 name: alice
 description: "Lightweight Alice version for Dio"
-version: 0.0.4
+version: 0.0.5
 homepage: 'none'
 
 environment:
@@ -10,9 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dio: ^5.2.1+1
-  rxdart: ^0.27.7
-  share_plus: ^7.0.2
+  dio:
+  rxdart: 
+  share_plus: 
 
 dev_dependencies:
   flutter_test:
