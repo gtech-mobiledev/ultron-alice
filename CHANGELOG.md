@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Migrate to 3.32.0
+
 ## 0.0.4
 
 * Reverse call list to get latest call on top

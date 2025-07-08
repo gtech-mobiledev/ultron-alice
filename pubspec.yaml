@@ -1,6 +1,6 @@
 name: alice
 description: "Lightweight Alice version for Dio"
-version: 0.0.5
+version: 0.0.6
 homepage: 'none'
 
 environment:
