@@ -40,7 +40,7 @@ class _AliceCallDetailsScreenState extends State<AliceCallDetailsScreen>
               primary: AliceConstants.strongRed,
               secondary: AliceConstants.lightRed,
             ),
-        tabBarTheme: const TabBarTheme(
+        tabBarTheme: const TabBarThemeData(
           indicator: UnderlineTabIndicator(),
           indicatorSize: TabBarIndicatorSize.tab,
         ),
