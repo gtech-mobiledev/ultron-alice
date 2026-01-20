@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Migrating from Share to SharePlus
+
 ## 0.0.6
 
 * Migrate to 3.32.0
